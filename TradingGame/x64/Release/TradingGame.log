@@ -1,6 +1,25 @@
-﻿  Source.cpp
+﻿  TradingMarket.cpp
+C:\Users\ralfo\Desktop\Projekti\To-the-moon\TradingGame\TradingMarket.cpp(239,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\ralfo\Desktop\Projekti\To-the-moon\TradingGame\TradingMarket.cpp(244,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ralfo\Desktop\Projekti\To-the-moon\TradingGame\TradingMarket.cpp(249,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ralfo\Desktop\Projekti\To-the-moon\TradingGame\TradingMarket.cpp(254,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ralfo\Desktop\Projekti\To-the-moon\TradingGame\TradingMarket.cpp(283,15): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+C:\Users\ralfo\Desktop\Projekti\To-the-moon\TradingGame\TradingMarket.cpp(284,15): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
   Generating code
-  Compiler switch has changed, fall back to full compilation.
-  All 4 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 730 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  TradingGame.vcxproj -> C:\Users\ralfo\Desktop\Projekti\TradingGame\x64\Release\TradingGame.exe
+  TradingGame.vcxproj -> C:\Users\ralfo\Desktop\Projekti\To-the-moon\x64\Release\TradingGame.exe

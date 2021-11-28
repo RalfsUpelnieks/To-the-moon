@@ -1,16 +1,4 @@
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <sstream>
-
-#include <random>
-#include <vector>
-#include <numeric>
-
 #include "Game.h"
-#include "PieChart.h"
-#include "Buttons.h"
-#include "Plot.h"
 
 void Game::initWindow() {
 	sf::ContextSettings settings;
@@ -20,7 +8,7 @@ void Game::initWindow() {
 	window->setVerticalSyncEnabled(false);
 
 	srand(static_cast <unsigned> (time(0)));
-	scene = MENU;
+	scene = TRADE_MARKET;
 }
 
 void Game::initTextures() {
@@ -94,7 +82,7 @@ void Game::initGUI() {
 	startBackground.setPosition(0.f, 0.f);
 
 	//Load font
-	if (!font.loadFromFile("Fonts/Dosis-Light.ttf"))
+	if (!font.loadFromFile("Fonts/arialbd.ttf"))
 		std::cout << "ERROR::GAME::Failed to load font" << "\n";
 
 	//Init point text
@@ -104,46 +92,91 @@ void Game::initGUI() {
 	pointText.setFillColor(sf::Color::White);
 	pointText.setString("test");
 
-	portfolioText.setFont(font);
-	portfolioText.setCharacterSize(40);
-	portfolioText.setFillColor(sf::Color::Black);
-	portfolioText.setString("Portfolio");
-	portfolioText.setPosition(10, 40);
-
 	totalValueText.setFont(font);
-	totalValueText.setCharacterSize(20);
-	totalValueText.setFillColor(sf::Color::Black);
+	totalValueText.setCharacterSize(18);
+	totalValueText.setFillColor(sf::Color(66, 69, 71));
 	totalValueText.setString("Portfolio total value");
-	totalValueText.setPosition(81, 170);
+	totalValueText.setPosition(64, 175);
 	totalValueMoneyText.setFont(font);
-	totalValueMoneyText.setCharacterSize(23);
-	totalValueMoneyText.setFillColor(sf::Color::Black);
+	totalValueMoneyText.setCharacterSize(17);
+	totalValueMoneyText.setFillColor(sf::Color(66, 69, 71));
 	totalValueMoneyText.setString("$1.68");
 	totalValueMoneyText.setOrigin(totalValueMoneyText.getGlobalBounds().width / 2.f, totalValueMoneyText.getGlobalBounds().height / 2.f);
 	totalValueMoneyText.setPosition(150, 202);
 
+	//bar
+	bar.setSize(sf::Vector2f(1280, 50));
+	bar.setFillColor(sf::Color(240, 240, 240));
+	bar.setPosition(sf::Vector2f(0, 34));
+	bar.setOutlineColor(sf::Color(135, 135, 135));
+	bar.setOutlineThickness(1);
+
+	timeText.setFont(font);
+	timeText.setCharacterSize(20);
+	timeText.setFillColor(sf::Color::Black);
+	timeText.setString("16:39");
+	timeText.setPosition(1148, 35);
+
+	dateText.setFont(font);
+	dateText.setCharacterSize(18);
+	dateText.setFillColor(sf::Color::Black);
+	dateText.setString("11/18/2021");
+	dateText.setPosition(1130, 60);
+
+	bankAccountText.setFont(font);
+	bankAccountText.setCharacterSize(18);
+	bankAccountText.setFillColor(sf::Color::Black);
+	bankAccountText.setString("Personal bank account");
+	bankAccountText.setPosition(5, 35);
+
+	moneyText.setFont(font);
+	moneyText.setCharacterSize(20);
+	moneyText.setFillColor(sf::Color::Black);
+	moneyText.setString("1620,33 EUR");
+	moneyText.setPosition(5, 56);
+
 	//PieChart
 	pChart.initPieChart(font);
 
-	//Plot
-	testPlot.initPlot(sf::Vector2f(900, 360), sf::Vector2f(340, 340), 40, font, sf::Color(0, 106, 255));
+	//text
+	newsText.setPosition(10, 86);
+	newsText.setFont(font);
+	newsText.setCharacterSize(40);
+	newsText.setFillColor(sf::Color::White);
+	newsText.setOutlineColor(sf::Color(29, 161, 242));
+	newsText.setOutlineThickness(3);
+	newsText.setString("Chatter");
 
-	for (int i = 0; i < 63; i++) {
-		if (i == 0) {
-			plotValues.push_back(Game::getDistribution(50));
-		}
-		else {
-			plotValues.push_back(Game::getDistribution(plotValues.back()));
-		}
+	newsText2.setPosition(10, 150);
+	newsText2.setFont(font);
+	newsText2.setCharacterSize(20);
+	newsText2.setFillColor(sf::Color::Black);;
+	newsText2.setString("Chatter is currently down for maintenace.");
 
-		plotVolValues.push_back(20000 + static_cast <int> (rand()) / (static_cast <int> (RAND_MAX / (40000 - 20000))));
-	}
+	lifestyleText.setPosition(500, 150);
+	lifestyleText.setFont(font);
+	lifestyleText.setCharacterSize(20);
+	lifestyleText.setFillColor(sf::Color::Black);;
+	lifestyleText.setString("You are alive!\nthis text is not centered just so you know. I could change it but no.");
+
+	shopText.setPosition(500, 150);
+	shopText.setFont(font);
+	shopText.setCharacterSize(40);
+	shopText.setFillColor(sf::Color::Black);;
+	shopText.setString("     Error 404:\nPage not found");
+
+	settingsText.setPosition(300, 150);
+	settingsText.setFont(font);
+	settingsText.setCharacterSize(20);
+	settingsText.setFillColor(sf::Color::Black);;
+	settingsText.setString("All settings have been succesfully changed!\nThe game is perfect as it is no need to change anything\nor i didn't have enough time to make an actual settings menu.");
 }
 
 Game::Game() { 
 	initWindow();
 	initTextures();
 	initGUI();
+	tradingPage.initTradingMarket(this->font);
 }
 
 //Functions
@@ -245,6 +278,7 @@ void Game::Events() {
 		case sf::Event::MouseButtonPressed:
 			if (scene == MENU && startButton.isMouseOver(*window) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				scene = HOME;
+				homeButton.ChangeButton(textures["Home_button_selected"]);
 			}
 
 			if (homeButton.isMouseOver(*window) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && scene != MENU) {
@@ -317,6 +351,9 @@ void Game::Events() {
 				financesButton.ChangeButton(textures["Finances_button"]);
 				scene = SETTINGS;
 			}
+			if (scene == TRADE_MARKET) {
+				tradingPage.mouseCheck(*window);
+			}
 			break;
 		}
 	}
@@ -345,22 +382,23 @@ void Game::render() {
 		Game::renderHome();
 	}
 	else if (scene == TRADE_MARKET) {
-		Game::renderTradeMarket();
+		tradingPage.renderTradeMarket(*window);
 	}
 	else if (scene == NEWS) {
-
+		window->draw(newsText);
+		window->draw(newsText2);
 	}
 	else if (scene == LIFESTYLE) {
-
+		window->draw(lifestyleText);
 	}
 	else if (scene == SHOP) {
-
+		window->draw(shopText);
 	}
 	else if (scene == FINANCES) {
 
 	}
 	else if (scene == SETTINGS) {
-
+		window->draw(settingsText);
 	}
 	
 
@@ -368,7 +406,11 @@ void Game::render() {
 }
 
 void Game::renderGUI() {
-	window->draw(portfolioText);
+	window->draw(bar);
+	window->draw(timeText);
+	window->draw(dateText);
+	window->draw(bankAccountText);
+	window->draw(moneyText);
 
 	homeButton.draw(*window);
 	tradeButton.draw(*window);
@@ -391,44 +433,7 @@ void Game::renderHome() {
 	pChart.ClearVertices();
 
 	pChart.GenerateVertices();
-	pChart.draw(*window, sf::RenderStates::Default);
+	pChart.draw(*window);
 	window->draw(totalValueText);
 	window->draw(totalValueMoneyText);
-}
-
-void Game::renderTradeMarket() {
-	if (clock.getElapsedTime().asMilliseconds() > 1000) {
-		clock.restart();
-		plotValues.erase(plotValues.begin());
-		plotValues.push_back(Game::getDistribution(plotValues.back()));
-
-		plotVolValues.erase(plotVolValues.begin());
-		plotVolValues.push_back(20000 + static_cast <int> (rand()) / (static_cast <int> (RAND_MAX / (40000 - 20000))));
-	}
-
-	testPlot.setValue(plotValues, plotVolValues);
-
-	testPlot.GenerateVertices();
-
-	window->draw(testPlot);
-}
-
-float Game::getDistribution(float old_price) {
-	float volatility = 2 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - 2)));
-	//float volatility = 2;
-
-	float rnd = 0.01f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.f - 0.01f)));
-
-	float change_percent = 2 * volatility * rnd;
-	if (change_percent > volatility)
-		change_percent -= (2 * volatility);
-	
-	float change_amount = old_price * change_percent / 100;
-	float new_price = old_price + change_amount;
-
-	if (new_price < 100) {
-		new_price += std::abs(change_amount) * 2;
-	}
-	
-	return new_price;
 }

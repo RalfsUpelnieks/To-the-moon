@@ -54,7 +54,7 @@ void DateTime::updateDate()
 		this->hour -= 59;
 	}
 
-	if (this->min > 59) {
+	if (this->day > 59) {
 
 		if (this->month == 2) {
 			if (((this->year % 400 == 0) || (this->year % 4 == 0 && this->year % 100 != 0))) {

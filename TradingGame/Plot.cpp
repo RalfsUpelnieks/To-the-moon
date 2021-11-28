@@ -1,21 +1,20 @@
 #include "Plot.h"
 
-void Plot::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    target.draw(IndicatorLinesVertexArray, states);
-    target.draw(borderVertexArray, states);
+void Plot::draw(sf::RenderTarget& window) {
+    window.draw(IndicatorLinesVertexArray);
+    window.draw(borderVertexArray);
     for (int i = 0; i < dataSetsVertexArray.size(); i++) {
-        target.draw(dataSetsVertexArray[i], states);
+        window.draw(dataSetsVertexArray[i]);
     }
     for (int i = 0; i < textElementArray.size(); i++) {
-        target.draw(textElementArray[i], states);
+        window.draw(textElementArray[i]);
     }
 }
 
-void Plot::initPlot(const sf::Vector2f& position, const sf::Vector2f& dimension, const float& margin, const sf::Font& font , const sf::Color& color) {
+void Plot::initPlot(const sf::Vector2f& position, const sf::Vector2f& dimension, const float& margin, const sf::Font& font) {
     this->origin = position;
     this->dimension = dimension;
     this->margin = margin;
-    this->color = color;
     this->font = font;
 }
 
@@ -81,15 +80,10 @@ void Plot::GenerateVertices() {
 
     // Border
     borderVertexArray.setPrimitiveType(sf::LineStrip);
-    //Topleft
-    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(0, CoordBounds.y - CoordBounds.x)), mainColor));
-    //Origin
-    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(0, 0)), mainColor));
-    //BottomRight
-    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(priceValues.size() - 1.f, 0)), mainColor));
-    //TopRight
-    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(priceValues.size() - 1.f, CoordBounds.y - CoordBounds.x)), mainColor));
-    //Topleft
+    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(0, CoordBounds.y - CoordBounds.x)), borderColor));
+    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(0, 0)), borderColor));
+    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(priceValues.size() - 1.f, 0)), borderColor));
+    borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(priceValues.size() - 1.f, CoordBounds.y - CoordBounds.x)), borderColor));
     borderVertexArray.append(sf::Vertex(CoordToWindowPosition(sf::Vector2f(0, CoordBounds.y - CoordBounds.x)), mainColor));
 
     IndicatorLinesVertexArray.setPrimitiveType(sf::PrimitiveType::Lines);
@@ -104,7 +98,7 @@ void Plot::GenerateVertices() {
         sf::Vector2f windowPosition = CoordToWindowPosition(sf::Vector2f(0, y - CoordBounds.x));
 
         IndicatorLinesVertexArray.append(sf::Vertex(windowPosition, sf::Color(217, 217, 217)));
-        IndicatorLinesVertexArray.append(sf::Vertex(sf::Vector2f(windowPosition.x + dimension.y - 6, windowPosition.y), sf::Color(217, 217, 217)));
+        IndicatorLinesVertexArray.append(sf::Vertex(sf::Vector2f(windowPosition.x + dimension.x - 12, windowPosition.y), sf::Color(217, 217, 217)));
 
         //Price text
         sf::Text priceIndicatorText;
@@ -117,10 +111,17 @@ void Plot::GenerateVertices() {
             priceIndicatorText.setString(ToString(y, 0));
         }
         priceIndicatorText.setFillColor(mainColor);
-        priceIndicatorText.setPosition(CoordToWindowPosition(sf::Vector2f(priceValues.size() + 3, y - CoordBounds.x)));
-        
-        sf::FloatRect tDimension = priceIndicatorText.getLocalBounds();
-        priceIndicatorText.move(-tDimension.width - 2, -tDimension.height / 2);
+        sf::Vector2f pricePosition = CoordToWindowPosition(sf::Vector2f(priceValues.size() - 0.8f, y - CoordBounds.x));
+        //check if first or last text and sets position
+        if (y == CoordBounds.x) {
+            priceIndicatorText.setPosition(pricePosition.x, pricePosition.y - 16);
+        }
+        else if (y == CoordBounds.x + CoordSteps.y * 6) {
+            priceIndicatorText.setPosition(pricePosition.x, pricePosition.y - 2);
+        }
+        else {
+            priceIndicatorText.setPosition(pricePosition.x, pricePosition.y - 8);
+        }
 
         textElementArray.push_back(priceIndicatorText);
 
@@ -131,60 +132,50 @@ void Plot::GenerateVertices() {
             volIndicatorText.setFont(font);
             if (vol == 0) {
                 volIndicatorText.setString(ToString(vol / 1000, 0));
+                volIndicatorText.setPosition(windowPosition.x - (margin * 0.25f), windowPosition.y - 9);
             }
             else {
                 volIndicatorText.setString(ToString(vol / 1000, 0) + "K");
+                volIndicatorText.setPosition(windowPosition.x - (margin * 0.25f), windowPosition.y - 5);
             }
             volIndicatorText.setFillColor(mainColor);
-            volIndicatorText.setPosition(windowPosition.x - (margin * 0.25f), windowPosition.y - 5);
-
-            sf::FloatRect tDimension2 = volIndicatorText.getLocalBounds();
-            volIndicatorText.move(-tDimension2.width - 2, -tDimension2.height / 2);
-
+            volIndicatorText.move(-volIndicatorText.getLocalBounds().width - 2, -volIndicatorText.getLocalBounds().height / 2);
             textElementArray.push_back(volIndicatorText);
             vol += volStep;
         }
-        
     }
 
-    //Generate actual data lines
-
+    //Generate data lines
     sf::VertexArray graph1;
     sf::VertexArray graph2;
-
-    sf::Color col = color;
 
     graph1.setPrimitiveType(sf::PrimitiveType::LinesStrip);
 
     for (float i = 0; i < priceValues.size(); i++) {
         sf::Vector2f windowPosition = CoordToWindowPosition(sf::Vector2f{ i, priceValues[i] - CoordBounds.x});
-        graph1.append(sf::Vertex(windowPosition, col));
+        graph1.append(sf::Vertex(windowPosition, lineColor));
     }
 
     // Generates bars
-
     graph2.setPrimitiveType(sf::PrimitiveType::Quads);
 
     for (float i = 1; i < priceValues.size(); i++) {
-
         if (priceValues[i] - priceValues[i - 1] < 0) {
-            col = sf::Color::Red;
+            barColor = sf::Color::Red;
         }
         else {
-            col = sf::Color::Green;
+            barColor = sf::Color::Green;
         }
 
         sf::Vector2f dataValue = sf::Vector2f{i, (float)volValues[i]};
         sf::Vector2f windowPosition = CoordToWindowPositionVol(dataValue);
         sf::Vector2f zeroWindowPosition = CoordToWindowPositionVol(sf::Vector2f(dataValue.x, 0));
 
-        graph2.append(sf::Vertex(sf::Vector2f((windowPosition.x - 2) - 2.5, windowPosition.y), col));
-        graph2.append(sf::Vertex(sf::Vector2f((windowPosition.x + 2) - 2.5, windowPosition.y), col));
-
-        graph2.append(sf::Vertex(sf::Vector2f((zeroWindowPosition.x + 2) - 2.5, zeroWindowPosition.y), col));
-        graph2.append(sf::Vertex(sf::Vector2f((zeroWindowPosition.x - 2) - 2.5, zeroWindowPosition.y), col));
+        graph2.append(sf::Vertex(sf::Vector2f((windowPosition.x - 2) - 2.5, windowPosition.y), barColor));
+        graph2.append(sf::Vertex(sf::Vector2f((windowPosition.x + 2) - 2.5, windowPosition.y), barColor));
+        graph2.append(sf::Vertex(sf::Vector2f((zeroWindowPosition.x + 2) - 2.5, zeroWindowPosition.y), barColor));
+        graph2.append(sf::Vertex(sf::Vector2f((zeroWindowPosition.x - 2) - 2.5, zeroWindowPosition.y), barColor));
     }
-
     dataSetsVertexArray.push_back(graph2);
     dataSetsVertexArray.push_back(graph1);
 }
@@ -205,14 +196,10 @@ sf::Vector2f Plot::CoordToWindowPosition(const sf::Vector2f& coords) {
 
 sf::Vector2f Plot::CoordToWindowPositionVol(const sf::Vector2f& coords) {
     sf::Vector2f windowPosition;
-
-    float xAxisLength = dimension.x;
-    float xAxisMax = priceValues.size();
-    float yAxisLength = dimension.y;
     float yAxisMax = 180000;
 
-    windowPosition.x = origin.x + (xAxisLength * (coords.x / xAxisMax));
-    windowPosition.y = origin.y + (dimension.y - yAxisLength * (coords.y / yAxisMax));
+    windowPosition.x = origin.x + (dimension.x * (coords.x / priceValues.size()));
+    windowPosition.y = origin.y + (dimension.y - dimension.y * (coords.y / yAxisMax));
     return windowPosition;
 }
 

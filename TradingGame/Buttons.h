@@ -18,7 +18,7 @@ public:
 
 	Position GetPosition();
 
-	void draw(sf::RenderWindow& window);
+	void draw(sf::RenderTarget& window);
 
 	bool isMouseOver(sf::RenderWindow& window);
 };

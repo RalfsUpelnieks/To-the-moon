@@ -18,7 +18,7 @@ Buttons::Position Buttons::GetPosition() {
 	return pos;
 }
 
-void Buttons::draw(sf::RenderWindow& window) {
+void Buttons::draw(sf::RenderTarget& window) {
 	window.draw(button);
 }
 

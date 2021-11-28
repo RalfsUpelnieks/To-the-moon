@@ -1,11 +1,17 @@
 #pragma once
 
+#include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include "Buttons.h"
-#include "PieChart.h"
-#include "Plot.h"
+#include <iostream>
+#include <sstream>
+#include <random>
+#include <vector>
+#include <numeric>
 #include <ctime>
 
+#include "PieChart.h"
+#include "Buttons.h"
+#include "TradingMarket.h"
 
 class Game {
 private:
@@ -20,7 +26,6 @@ private:
 	
 	void renderMenu();
 	void renderHome();
-	void renderTradeMarket();
 
 	//GUI
 	Buttons startButton;
@@ -37,19 +42,24 @@ private:
 	sf::Text pointText;
 
 	
-	sf::RectangleShape playerHpBar;
-	sf::RectangleShape playerHpBarBack;
+	sf::RectangleShape bar;
+	sf::Text timeText;
+	sf::Text dateText;
+
+	sf::Text bankAccountText;
+	sf::Text moneyText;
 
 	PieChart pChart;
-	Plot testPlot;
+	TradingMarket tradingPage;
 
-	sf::Text portfolioText;
 	sf::Text totalValueText;
 	sf::Text totalValueMoneyText;
-	std::vector<float> plotValues;
-	std::vector<int> plotVolValues;
 
-	sf::Clock clock;
+	sf::Text newsText;
+	sf::Text newsText2;
+	sf::Text shopText;
+	sf::Text lifestyleText;
+	sf::Text settingsText;
 
 	enum Scene
 	{
@@ -76,7 +86,4 @@ public:
 
 	void renderGUI();
 	void render();
-
-	float getDistribution(float old_price);
-
 };

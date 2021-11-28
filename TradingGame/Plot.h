@@ -8,7 +8,7 @@
 #include "SFML/Graphics.hpp"
 
 
-class Plot : public sf::Drawable {
+class Plot {
 private:
     sf::Vector2f origin;
     sf::Vector2f dimension;
@@ -22,15 +22,14 @@ private:
     sf::Font font;
 
     sf::Color mainColor = sf::Color::Black;
-
-    sf::Color color;
+    sf::Color borderColor = sf::Color(135, 135, 135);
+    sf::Color barColor;
+    sf::Color lineColor = sf::Color(0, 106, 255);
 
     sf::VertexArray borderVertexArray;
     sf::VertexArray IndicatorLinesVertexArray;
     std::vector<sf::VertexArray> dataSetsVertexArray;
     std::vector<sf::Text> textElementArray;
-
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void ClearVertices();
 
@@ -40,7 +39,9 @@ private:
 
     std::string ToString(const double& d, const size_t& precision = 2);
 public:
-    void initPlot(const sf::Vector2f& position, const sf::Vector2f& dimension, const float& margin, const sf::Font& font, const sf::Color& color);
+    void draw(sf::RenderTarget& target);
+
+    void initPlot(const sf::Vector2f& position, const sf::Vector2f& dimension, const float& margin, const sf::Font& font);
 
     void PlotData(float ymin, float ymax, const std::vector<float>& values);
 
