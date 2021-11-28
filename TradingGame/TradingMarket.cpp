@@ -55,11 +55,11 @@ void TradingMarket::initTradingMarket(const sf::Font& font) {
 	horizontalLine1.setFillColor(lineColor);
 
 	//Left information panel objects
-	invNameText.setPosition(4, 86);
+	invNameText.setPosition(100, 102);
 	invNameText.setFillColor(sf::Color(40, 40, 40));
 	invNameText.setFont(this->font);
 	invNameText.setCharacterSize(18);
-	
+
 	//porfolio objects
 	portfolioPanel.setSize(sf::Vector2f(200, 30));
 	portfolioPanel.setPosition(sf::Vector2f(0, 395));
@@ -72,6 +72,28 @@ void TradingMarket::initTradingMarket(const sf::Font& font) {
 	portfolioText.setFont(this->font);
 	portfolioText.setCharacterSize(18);
 	portfolioText.setString("Portfolio");
+
+	portfolioPanel2.setSize(sf::Vector2f(600, 30));
+	portfolioPanel2.setPosition(sf::Vector2f(0, 426));
+	portfolioPanel2.setFillColor(sf::Color(240, 240, 240));
+	portfolioPanel2.setOutlineColor(lineColor);
+	portfolioPanel2.setOutlineThickness(1);
+
+	portfolioline1.setSize(sf::Vector2f(1, 32));
+	portfolioline1.setPosition(sf::Vector2f(200, 425));
+	portfolioline1.setFillColor(lineColor);
+
+	portfolioline2.setSize(sf::Vector2f(1, 32));
+	portfolioline2.setPosition(sf::Vector2f(300, 425));
+	portfolioline2.setFillColor(lineColor);
+
+	portfolioline3.setSize(sf::Vector2f(1, 32));
+	portfolioline3.setPosition(sf::Vector2f(400, 425));
+	portfolioline3.setFillColor(lineColor);
+
+	portfolioline4.setSize(sf::Vector2f(1, 32));
+	portfolioline4.setPosition(sf::Vector2f(500, 425));
+	portfolioline4.setFillColor(lineColor);
 
 	//Select tab objects
 	selectVrtLine1.setSize(sf::Vector2f(1, 32));
@@ -122,6 +144,31 @@ void TradingMarket::initTradingMarket(const sf::Font& font) {
 	orderText.setCharacterSize(18);
 	orderText.setString("Order menu");
 
+	unitsText.setPosition(646, 545);
+	unitsText.setFillColor(sf::Color(40, 40, 40));
+	unitsText.setFont(this->font);
+	unitsText.setCharacterSize(16);
+	unitsText.setString("Units");
+
+	unitsValueText.setPosition(sf::Vector2f(665, 573));
+	unitsValueText.setFillColor(sf::Color(40, 40, 40));
+	unitsValueText.setFont(this->font);
+	unitsValueText.setCharacterSize(13);
+	unitsValueText.setString("0");
+
+	costText.setPosition(646, 655);
+	costText.setFillColor(sf::Color(40, 40, 40));
+	costText.setFont(this->font);
+	costText.setCharacterSize(16);
+	costText.setString("Cost");
+
+	costValueText.setPosition(665, 682);
+	costValueText.setFillColor(sf::Color(40, 40, 40));
+	costValueText.setFont(this->font);
+	costValueText.setCharacterSize(13);
+	costValueText.setString(std::to_string(buyPrices[buyPriceSelected]) + " EUR");
+	costValueText.setOrigin(round(costValueText.getLocalBounds().left + costValueText.getLocalBounds().width / 2.0f), round(costValueText.getLocalBounds().top + costValueText.getLocalBounds().height / 2.0f));
+
 	orderPanel1.setSize(sf::Vector2f(130, 40));
 	orderPanel1.setPosition(sf::Vector2f(601.f, 544.f));
 	orderPanel1.setFillColor(sf::Color(240, 240, 240));
@@ -149,6 +196,9 @@ void TradingMarket::initTradingMarket(const sf::Font& font) {
 	crypto[5].init("Heavycoin(HVC)", 4.f, 1.f, 5000.f);
 
 	stocks[0].init("Nikola(NIKL)", 1081.f, 1.f, 400000.f);
+	stocks[1].init("Pear Inc(PPER)", 156.f, 1.f, 400000.f);
+	stocks[2].init("Bank of Moon(BMN)", 45.f, 1.f, 400000.f);
+	stocks[3].init("Amen INC(AMNI)", 45.f, 1.f, 400000.f);
 
 	plot.initPlot(sf::Vector2f(250, 85), sf::Vector2f(640, 340), 40, font);
 	plot.setValue(stocks[stockSelected].getPrice(), stocks[stockSelected].getVol());
@@ -174,10 +224,14 @@ void TradingMarket::renderTradeMarket(sf::RenderTarget& window) {
 	window.draw(verticalLine2);
 	window.draw(verticalLine3);
 	window.draw(horizontalLine1);
-	
 	//portfolio objects
 	window.draw(portfolioPanel);
 	window.draw(portfolioText);
+	window.draw(portfolioPanel2);
+	window.draw(portfolioline1);
+	window.draw(portfolioline2);
+	window.draw(portfolioline3);
+	window.draw(portfolioline4);
 	//select panel objects
 	window.draw(selectPanel);
 	window.draw(selectVrtLine1);
@@ -199,25 +253,30 @@ void TradingMarket::renderTradeMarket(sf::RenderTarget& window) {
 
 	//order menu
 	window.draw(orderPanel);
-	window.draw(orderText);
 	window.draw(orderPanel1);
 	window.draw(orderPanel2);
 	upButton.draw(window);
 	buyButton.draw(window);
 	shortButton.draw(window);
 	downButton.draw(window);
-
 	sellButton.draw(window);
+	window.draw(orderText);
+	window.draw(unitsText);
+	window.draw(unitsValueText);
+	window.draw(costText);
+	window.draw(costValueText);
 }
 
 void TradingMarket::updatePage() {
 	if (showingTab == STOCK) {
 		plot.setValue(stocks[stockSelected].getPrice(), stocks[stockSelected].getVol());
 		invNameText.setString(stocks[stockSelected].getName());
+		invNameText.setOrigin(round(invNameText.getLocalBounds().left + invNameText.getLocalBounds().width / 2.0f), round(invNameText.getLocalBounds().top + invNameText.getLocalBounds().height / 2.0f));
 	}
 	else {
 		plot.setValue(crypto[stockSelected].getPrice(), crypto[stockSelected].getVol());
 		invNameText.setString(crypto[stockSelected].getName());
+		invNameText.setOrigin(round(invNameText.getLocalBounds().left + invNameText.getLocalBounds().width / 2.0f), round(invNameText.getLocalBounds().top + invNameText.getLocalBounds().height / 2.0f));
 	}
 
 	TextArray.clear();
@@ -229,11 +288,13 @@ void TradingMarket::updatePage() {
 	int size;
 	if (selectedTab == STOCK) {
 		size = sizeof(stocks) / sizeof(stocks[0]);
+		unitsValueText.setString(std::to_string(buyPrices[buyPriceSelected] / stocks[stockSelected].getPrice().back()));
 	}
 	else {
 		size = sizeof(crypto) / sizeof(crypto[0]);
+		unitsValueText.setString(std::to_string(buyPrices[buyPriceSelected] / crypto[stockSelected].getPrice().back()));
 	}
-
+	unitsValueText.setOrigin(round(unitsValueText.getLocalBounds().left + unitsValueText.getLocalBounds().width / 2.0f), round(unitsValueText.getLocalBounds().top + unitsValueText.getLocalBounds().height / 2.0f));
 	for (int i = 0; i < size; ++i) {
 		investPanel.setSize(sf::Vector2f(350, 30));
 		investPanel.setPosition(sf::Vector2f(931, 150 + 30 * i));
@@ -294,6 +355,36 @@ void TradingMarket::mouseCheck(sf::RenderWindow& window) {
 		stocksButton.ChangeButton(textures["stocks_button"]);
 		selectedTab = CRYPTO;
 		updatePage();
+	}
+	else if (upButton.isMouseOver(window)) {
+		if (buyPriceSelected < 21) {
+			buyPriceSelected += 1;
+			
+			costValueText.setString(std::to_string(buyPrices[buyPriceSelected]) + " EUR");
+			costValueText.setOrigin(round(costValueText.getLocalBounds().left + costValueText.getLocalBounds().width / 2.0f), round(costValueText.getLocalBounds().top + costValueText.getLocalBounds().height / 2.0f));
+			if (buyPriceSelected == 21) {
+				upButton.ChangeButton(textures["up_button_selected"]);
+			}
+			else {
+				downButton.ChangeButton(textures["down_button"]);
+			}
+			updatePage();
+		}
+	}
+	else if (downButton.isMouseOver(window)) {
+		if (buyPriceSelected > 0) {
+			buyPriceSelected -= 1;
+
+			costValueText.setString(std::to_string(buyPrices[buyPriceSelected]) + " EUR");
+			costValueText.setOrigin(round(costValueText.getLocalBounds().left + costValueText.getLocalBounds().width / 2.0f), round(costValueText.getLocalBounds().top + costValueText.getLocalBounds().height / 2.0f));
+			if (buyPriceSelected == 0) {
+				downButton.ChangeButton(textures["down_button_selected"]);
+			}
+			else {
+				upButton.ChangeButton(textures["up_button"]);
+			}
+			updatePage();
+		}
 	}
 
 	int size;

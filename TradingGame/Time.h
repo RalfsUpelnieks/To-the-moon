@@ -1,5 +1,8 @@
 #pragma once
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <iomanip>
+#include <sstream>
 class DateTime
 {
 public:
@@ -8,7 +11,6 @@ public:
 	int day;
 	int hour;
 	int min;
-	int sec;
 
 	DateTime(int year, int month, int day, int hour, int min);
 
@@ -22,9 +24,14 @@ public:
 
 	void AddMinutes(int amount);
 
-	std::string ToString();
+	std::string TimeToString();
+
+	std::string DateToString();
 
 private:
-	void updateDate();
+	void updateMinutes();
+	void updateHours();
+	void updateDays();
+	void updateMonths();
 };
 

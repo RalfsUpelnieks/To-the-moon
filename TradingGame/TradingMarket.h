@@ -6,6 +6,8 @@
 
 class TradingMarket {
 private:
+	sf::Font font;
+
 	std::map<std::string, sf::Texture*> textures;
 
 	Plot plot;
@@ -25,6 +27,7 @@ private:
 
 	//buttons
 	int stockSelected = 0;
+	int buyPriceSelected = 11;
 	Buttons stocksButton;
 	Buttons cryptoButton;
 	Buttons buyButton;
@@ -41,10 +44,20 @@ private:
 	//portfolio window
 	sf::RectangleShape portfolioPanel;
 	sf::Text portfolioText;
+	sf::RectangleShape portfolioPanel2;
+	sf::RectangleShape portfolioline1;
+	sf::RectangleShape portfolioline2;
+	sf::RectangleShape portfolioline3;
+	sf::RectangleShape portfolioline4;
 
 	//order panel objects
 	sf::RectangleShape orderPanel;
 	sf::Text orderText;
+	sf::Text unitsText;
+	sf::Text unitsValueText;
+	sf::Text costText;
+	sf::Text costValueText;
+
 	Buttons shortButton;
 	Buttons upButton;
 	Buttons downButton;
@@ -55,9 +68,10 @@ private:
 
 	//investments
 	Investments crypto[6];
-	Investments stocks[1];
+	Investments stocks[4];
 	std::vector<sf::RectangleShape> investPanelArray;
 	std::vector<sf::Text> TextArray;
+	int buyPrices[22] = {5, 10, 25, 50, 75, 100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000, 25000, 50000, 75000, 100000, 250000, 500000, 750000, 1000000 };
 	
 	enum InvType{
 		STOCK,
@@ -65,14 +79,12 @@ private:
 	};
 	InvType selectedTab = STOCK;
 	InvType showingTab = STOCK;
-public:
-	sf::Font font;
 
+	void updatePage();
+public:
 	void initTradingMarket(const sf::Font& font);
 
 	void renderTradeMarket(sf::RenderTarget& window);
-
-	void updatePage();
 
 	void mouseCheck(sf::RenderWindow& window);
 };

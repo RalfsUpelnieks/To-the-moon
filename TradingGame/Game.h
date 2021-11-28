@@ -12,18 +12,20 @@
 #include "PieChart.h"
 #include "Buttons.h"
 #include "TradingMarket.h"
-
+#include "Time.h"
 class Game {
 private:
-	sf::RenderWindow *window;
 
+	sf::RenderWindow* window;
 	std::map<std::string, sf::Texture*> textures;
+
+	//time
+	sf::Clock clock;
+	DateTime dateTime = DateTime(2021, 11, 1, 8, 30);
 
 	void initWindow();
 	void initTextures();
-
 	void initGUI();
-	
 	void renderMenu();
 	void renderHome();
 
@@ -34,9 +36,7 @@ private:
 	Buttons homeButton;
 	Buttons tradeButton;
 	Buttons newsButton;
-	Buttons lifestyleButton;
 	Buttons shopButton;
-	Buttons financesButton;
 	Buttons settingsButton;
 
 	sf::Text pointText;
@@ -58,7 +58,6 @@ private:
 	sf::Text newsText;
 	sf::Text newsText2;
 	sf::Text shopText;
-	sf::Text lifestyleText;
 	sf::Text settingsText;
 
 	enum Scene
@@ -68,9 +67,7 @@ private:
 		HOME,
 		TRADE_MARKET,
 		NEWS,
-		LIFESTYLE,
 		SHOP,
-		FINANCES,
 		SETTINGS
 	};
 	Scene scene = HOME;

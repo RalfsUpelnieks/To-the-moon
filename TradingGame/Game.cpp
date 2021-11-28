@@ -8,7 +8,7 @@ void Game::initWindow() {
 	window->setVerticalSyncEnabled(false);
 
 	srand(static_cast <unsigned> (time(0)));
-	scene = TRADE_MARKET;
+	scene = MENU;
 }
 
 void Game::initTextures() {
@@ -33,26 +33,12 @@ void Game::initTextures() {
 	textures["News_button_selected"] = new sf::Texture();
 	textures["News_button_selected"]->loadFromFile("Textures/News_button_selected.png");
 
-	textures["Lifestyle_button"] = new sf::Texture();
-	textures["Lifestyle_button"]->loadFromFile("Textures/Lifestyle_button.png");
-	textures["Lifestyle_button_hover"] = new sf::Texture();
-	textures["Lifestyle_button_hover"]->loadFromFile("Textures/Lifestyle_button_hover.png");
-	textures["Lifestyle_button_selected"] = new sf::Texture();
-	textures["Lifestyle_button_selected"]->loadFromFile("Textures/Lifestyle_button_selected.png");
-
 	textures["Shop_button"] = new sf::Texture();
 	textures["Shop_button"]->loadFromFile("Textures/Shop_button.png");
 	textures["Shop_button_hover"] = new sf::Texture();
 	textures["Shop_button_hover"]->loadFromFile("Textures/Shop_button_hover.png");
 	textures["Shop_button_selected"] = new sf::Texture();
 	textures["Shop_button_selected"]->loadFromFile("Textures/Shop_button_selected.png");
-
-	textures["Finances_button"] = new sf::Texture();
-	textures["Finances_button"]->loadFromFile("Textures/Finances_button.png");
-	textures["Finances_button_hover"] = new sf::Texture();
-	textures["Finances_button_hover"]->loadFromFile("Textures/Finances_button_hover.png");
-	textures["Finances_button_selected"] = new sf::Texture();
-	textures["Finances_button_selected"]->loadFromFile("Textures/Finances_button_selected.png");
 
 	textures["Settings_button"] = new sf::Texture();
 	textures["Settings_button"]->loadFromFile("Textures/Settings_button.png");
@@ -73,10 +59,10 @@ void Game::initGUI() {
 	homeButton.Button(textures["Home_button"], 0.f, 0.f);
 	tradeButton.Button(textures["Trade_button"], homeButton.GetPosition().PosX, homeButton.GetPosition().PosY);
 	newsButton.Button(textures["News_button"], tradeButton.GetPosition().PosX, tradeButton.GetPosition().PosY);
-	lifestyleButton.Button(textures["Lifestyle_button"], newsButton.GetPosition().PosX, newsButton.GetPosition().PosY);
-	shopButton.Button(textures["Shop_button"], lifestyleButton.GetPosition().PosX, lifestyleButton.GetPosition().PosY);
-	financesButton.Button(textures["Finances_button"], shopButton.GetPosition().PosX, shopButton.GetPosition().PosY);
-	settingsButton.Button(textures["Settings_button"], financesButton.GetPosition().PosX, financesButton.GetPosition().PosY);
+	//lifestyleButton.Button(textures["Lifestyle_button"], newsButton.GetPosition().PosX, newsButton.GetPosition().PosY);
+	shopButton.Button(textures["Shop_button"], newsButton.GetPosition().PosX, newsButton.GetPosition().PosY);
+	//financesButton.Button(textures["Finances_button"], shopButton.GetPosition().PosX, shopButton.GetPosition().PosY);
+	settingsButton.Button(textures["Settings_button"], shopButton.GetPosition().PosX, shopButton.GetPosition().PosY);
 
 	startBackground.setTexture(*textures["MenuBackground"]);
 	startBackground.setPosition(0.f, 0.f);
@@ -96,13 +82,13 @@ void Game::initGUI() {
 	totalValueText.setCharacterSize(18);
 	totalValueText.setFillColor(sf::Color(66, 69, 71));
 	totalValueText.setString("Portfolio total value");
-	totalValueText.setPosition(64, 175);
+	totalValueText.setPosition(34, 175);
 	totalValueMoneyText.setFont(font);
 	totalValueMoneyText.setCharacterSize(17);
 	totalValueMoneyText.setFillColor(sf::Color(66, 69, 71));
 	totalValueMoneyText.setString("$1.68");
 	totalValueMoneyText.setOrigin(totalValueMoneyText.getGlobalBounds().width / 2.f, totalValueMoneyText.getGlobalBounds().height / 2.f);
-	totalValueMoneyText.setPosition(150, 202);
+	totalValueMoneyText.setPosition(120, 202);
 
 	//bar
 	bar.setSize(sf::Vector2f(1280, 50));
@@ -153,12 +139,6 @@ void Game::initGUI() {
 	newsText2.setFillColor(sf::Color::Black);;
 	newsText2.setString("Chatter is currently down for maintenace.");
 
-	lifestyleText.setPosition(500, 150);
-	lifestyleText.setFont(font);
-	lifestyleText.setCharacterSize(20);
-	lifestyleText.setFillColor(sf::Color::Black);;
-	lifestyleText.setString("You are alive!\nthis text is not centered just so you know. I could change it but no.");
-
 	shopText.setPosition(500, 150);
 	shopText.setFont(font);
 	shopText.setCharacterSize(40);
@@ -169,7 +149,7 @@ void Game::initGUI() {
 	settingsText.setFont(font);
 	settingsText.setCharacterSize(20);
 	settingsText.setFillColor(sf::Color::Black);;
-	settingsText.setString("All settings have been succesfully changed!\nThe game is perfect as it is no need to change anything\nor i didn't have enough time to make an actual settings menu.");
+	settingsText.setString("The game is perfect as it is no need to change anything\nor i didn't have enough time to make an actual settings menu.");
 }
 
 Game::Game() { 
@@ -197,7 +177,6 @@ void Game::Events() {
 			}
 			break;
 		case sf::Event::MouseMoved:
-
 			if (scene == HOME) {
 				homeButton.ChangeButton(textures["Home_button_selected"]);
 			}
@@ -228,18 +207,6 @@ void Game::Events() {
 				newsButton.ChangeButton(textures["News_button"]);
 			}
 
-
-			if (scene == LIFESTYLE) {
-				lifestyleButton.ChangeButton(textures["Lifestyle_button_selected"]);
-			}
-			else if (lifestyleButton.isMouseOver(*window)) {
-				lifestyleButton.ChangeButton(textures["Lifestyle_button_hover"]);
-			}
-			else {
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
-			}
-
-
 			if (scene == SHOP) {
 				shopButton.ChangeButton(textures["Shop_button_selected"]);
 			}
@@ -250,18 +217,6 @@ void Game::Events() {
 				shopButton.ChangeButton(textures["Shop_button"]);
 			}
 
-
-			if (scene == FINANCES) {
-				financesButton.ChangeButton(textures["Finances_button_selected"]);
-			}
-			else if (financesButton.isMouseOver(*window)) {
-				financesButton.ChangeButton(textures["Finances_button_hover"]);
-			}
-			else {
-				financesButton.ChangeButton(textures["Finances_button"]);
-			}
-
-
 			if (scene == SETTINGS) {
 				settingsButton.ChangeButton(textures["Settings_button_selected"]);
 			}
@@ -271,8 +226,6 @@ void Game::Events() {
 			else {
 				settingsButton.ChangeButton(textures["Settings_button"]);
 			}
-
-
 
 			break;
 		case sf::Event::MouseButtonPressed:
@@ -285,9 +238,7 @@ void Game::Events() {
 				homeButton.ChangeButton(textures["Home_button_selected"]);
 				tradeButton.ChangeButton(textures["Trade_button"]);
 				newsButton.ChangeButton(textures["News_button"]);
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
 				shopButton.ChangeButton(textures["Shop_button"]);
-				financesButton.ChangeButton(textures["Finances_button"]);
 				settingsButton.ChangeButton(textures["Settings_button"]);
 				scene = HOME;
 			}
@@ -295,9 +246,7 @@ void Game::Events() {
 				tradeButton.ChangeButton(textures["Trade_button_selected"]);
 				homeButton.ChangeButton(textures["Home_button"]);
 				newsButton.ChangeButton(textures["News_button"]);
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
 				shopButton.ChangeButton(textures["Shop_button"]);
-				financesButton.ChangeButton(textures["Finances_button"]);
 				settingsButton.ChangeButton(textures["Settings_button"]);
 				scene = TRADE_MARKET;
 			}
@@ -305,50 +254,24 @@ void Game::Events() {
 				newsButton.ChangeButton(textures["News_button_selected"]);
 				homeButton.ChangeButton(textures["Home_button"]);
 				tradeButton.ChangeButton(textures["Trade_button"]);
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
 				shopButton.ChangeButton(textures["Shop_button"]);
-				financesButton.ChangeButton(textures["Finances_button"]);
 				settingsButton.ChangeButton(textures["Settings_button"]);
 				scene = NEWS;
-			}
-			if (lifestyleButton.isMouseOver(*window) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && scene != MENU) {
-				lifestyleButton.ChangeButton(textures["Lifestyle_button_selected"]);
-				homeButton.ChangeButton(textures["Home_button"]);
-				tradeButton.ChangeButton(textures["Trade_button"]);
-				newsButton.ChangeButton(textures["News_button"]);
-				shopButton.ChangeButton(textures["Shop_button"]);
-				financesButton.ChangeButton(textures["Finances_button"]);
-				settingsButton.ChangeButton(textures["Settings_button"]);
-				scene = LIFESTYLE;
 			}
 			if (shopButton.isMouseOver(*window) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && scene != MENU) {
 				shopButton.ChangeButton(textures["Shop_button_selected"]);
 				homeButton.ChangeButton(textures["Home_button"]);
 				tradeButton.ChangeButton(textures["Trade_button"]);
 				newsButton.ChangeButton(textures["News_button"]);
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
-				financesButton.ChangeButton(textures["Finances_button"]);
 				settingsButton.ChangeButton(textures["Settings_button"]);
 				scene = SHOP;
-			}
-			if (financesButton.isMouseOver(*window) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && scene != MENU) {
-				financesButton.ChangeButton(textures["Finances_button_selected"]);
-				homeButton.ChangeButton(textures["Home_button"]);
-				tradeButton.ChangeButton(textures["Trade_button"]);
-				newsButton.ChangeButton(textures["News_button"]);
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
-				shopButton.ChangeButton(textures["Shop_button"]);
-				settingsButton.ChangeButton(textures["Settings_button"]);
-				scene = FINANCES;
 			}
 			if (settingsButton.isMouseOver(*window) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && scene != MENU) {
 				settingsButton.ChangeButton(textures["Settings_button_selected"]);
 				homeButton.ChangeButton(textures["Home_button"]);
 				tradeButton.ChangeButton(textures["Trade_button"]);
 				newsButton.ChangeButton(textures["News_button"]);
-				lifestyleButton.ChangeButton(textures["Lifestyle_button"]);
 				shopButton.ChangeButton(textures["Shop_button"]);
-				financesButton.ChangeButton(textures["Finances_button"]);
 				scene = SETTINGS;
 			}
 			if (scene == TRADE_MARKET) {
@@ -360,10 +283,12 @@ void Game::Events() {
 }
 
 void Game::update() {
-	updateGUI();
-}
-
-void Game::updateGUI() {
+	if (clock.getElapsedTime().asSeconds() >= 1) {
+		clock.restart();
+		dateTime.AddMinutes(1);
+		timeText.setString(dateTime.TimeToString());
+		dateText.setString(dateTime.DateToString());
+	}
 }
 
 void Game::render() {
@@ -388,20 +313,13 @@ void Game::render() {
 		window->draw(newsText);
 		window->draw(newsText2);
 	}
-	else if (scene == LIFESTYLE) {
-		window->draw(lifestyleText);
-	}
 	else if (scene == SHOP) {
 		window->draw(shopText);
-	}
-	else if (scene == FINANCES) {
-
 	}
 	else if (scene == SETTINGS) {
 		window->draw(settingsText);
 	}
 	
-
 	window->display();
 }
 
@@ -415,9 +333,7 @@ void Game::renderGUI() {
 	homeButton.draw(*window);
 	tradeButton.draw(*window);
 	newsButton.draw(*window);
-	lifestyleButton.draw(*window);
 	shopButton.draw(*window);
-	financesButton.draw(*window);
 	settingsButton.draw(*window);
 }
 

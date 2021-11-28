@@ -42,16 +42,16 @@ float Investments::randomPrice() {
 }
 
 std::vector<float> Investments::getPrice() {
-	return price;
+	return this->price;
 }
 
 std::vector<int> Investments::getVol() {
-	return vol;
+	return this->vol;
 }
 
 std::string Investments::getName()
 {
-	return name;
+	return this->name;
 }
 
 

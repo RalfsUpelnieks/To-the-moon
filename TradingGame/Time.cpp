@@ -9,52 +9,87 @@ DateTime::DateTime(int year, int month, int day, int hour, int min) {
 }
 
 void DateTime::AddYears(int amount) {
-	updateDate();
 	this->year += 1;
 }
 
 void DateTime::AddMonths(int amount) {
-	updateDate();
 	this->month += 1;
+	updateMonths();
 }
 
 void DateTime::AddHours(int amount) {
-	updateDate();
 	this->hour += 1;
+	updateHours();
 }
 
 void DateTime::AddDays(int amount) {
-	updateDate();
 	this->day += 1;
+	updateDays();
 }
 
 void DateTime::AddMinutes(int amount) {
-	updateDate();
 	this->min += 1;
+	updateMinutes();
 }
 
-std::string DateTime::ToString()
+std::string DateTime::TimeToString()
 {
-	return std::string();
-}
-
-void DateTime::updateDate()
-{
-	if (this->sec > 59) {
-		AddMinutes(1);
-		this->sec -= 59;
+	std::string timeStr;
+	if (hour < 10) {
+		timeStr = "0" + std::to_string(hour);
 	}
+	else {
+		timeStr = std::to_string(hour);
+	}
+	timeStr += ":";
+	if (min < 10) {
+		timeStr += "0" + std::to_string(min);
+	}
+	else {
+		timeStr += std::to_string(min);
+	}
+
+	return timeStr;
+}
+
+std::string DateTime::DateToString()
+{
+	std::string dateStr;
+	if (day < 10) {
+		dateStr = "0" + std::to_string(day);
+	}
+	else {
+		dateStr = std::to_string(day);
+	}
+	dateStr += "/";
+	if (month < 10) {
+		dateStr += "0" + std::to_string(month);
+	}
+	else {
+		dateStr += std::to_string(month);
+	}
+	dateStr += "/";
+	dateStr += std::to_string(year);
+
+	return dateStr;
+}
+
+void DateTime::updateMinutes(){
 	if (this->min > 59) {
 		AddHours(1);
-		this->min -= 59;
+		this->min -= 60;
 	}
+}
 
+void DateTime::updateHours(){
 	if (this->hour > 59) {
 		AddDays(1);
-		this->hour -= 59;
+		this->hour -= 60;
 	}
+}
 
-	if (this->day > 59) {
+void DateTime::updateDays(){
+	if (this->day > 29) {
 
 		if (this->month == 2) {
 			if (((this->year % 400 == 0) || (this->year % 4 == 0 && this->year % 100 != 0))) {
@@ -81,7 +116,9 @@ void DateTime::updateDate()
 			}
 		}
 	}
+}
 
+void DateTime::updateMonths(){
 	if (this->month > 12) {
 		AddYears(1);
 		this->month -= 12;

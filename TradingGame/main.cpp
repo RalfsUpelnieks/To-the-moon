@@ -10,6 +10,7 @@ int main() {
 	{
 		game.Events();
 		game.render();
+		game.update();
 	}
 
     //End of application

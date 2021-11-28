@@ -1,8 +1,8 @@
 #include "Buttons.h"
 
 void Buttons::Button(sf::Texture* texture, float pos_x, float pos_y) {
-	this->button.setTexture(*texture);
-	this->button.setPosition(pos_x, pos_y);
+	button.setTexture(*texture);
+	button.setPosition(pos_x, pos_y);
 }
 
 void Buttons::ChangeButton(sf::Texture* texture) {
